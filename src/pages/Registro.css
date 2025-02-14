@@ -1,0 +1,69 @@
+.registro-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+form {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    width: 100%;
+    max-width: 400px;
+    box-sizing: border-box;
+    margin: 0 auto; /* Center the form horizontally */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+label {
+  display: block;
+  margin-bottom: 15px;
+  color: #FFFFFF;
+}
+
+input, select {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: none;
+  border-radius: 5px;
+  background-color: #333;
+  color: #FFF;
+  box-sizing: border-box;
+}
+
+button {
+  background-color: #E84562;
+  color: #FFFFFF;
+  padding: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 20px;
+  box-sizing: border-box;
+}
+
+button:hover {
+  background-color: #00AAA9;
+}
+
+@media (max-width: 600px) {
+  .registro-container {
+    padding: 20px;
+  }
+
+  form {
+    padding: 20px;
+  }
+
+  input, select, button {
+    padding: 8px;
+  }
+}
