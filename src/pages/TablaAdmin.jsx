@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import './TablaAdmin.css';
-import logo from '../assets/logo.png';
+import logo from '../assets/images.png';
 import { AuthContext } from '../App';
 
 function TablaAdmin() {

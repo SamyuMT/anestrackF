@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './LoginToken.css';
-import logo from '../assets/logo.png';
+import logo from '../assets/images.png';
 import { AuthContext } from '../App';
 
 function LoginToken() {
