@@ -9,6 +9,7 @@ function TablaAdmin() {
   const [selectedReporte, setSelectedReporte] = useState('');
   const [token, setToken] = useState('');
   const [fecha, setFecha] = useState({ dia: '', mes: '', year: '' });
+  const [activeTab, setActiveTab] = useState('tabla');
   const { isTokenValid } = useContext(AuthContext);
 
   useEffect(() => {
@@ -43,8 +44,8 @@ function TablaAdmin() {
   };
 
   const handleFechaChange = (e) => {
-    const { name, value } = e.target;
-    setFecha({ ...fecha, [name]: value });
+    const [year, mes, dia] = e.target.value.split('-');
+    setFecha({ dia, mes, year });
   };
 
   const handleGenerateToken = async (e) => {
@@ -72,76 +73,83 @@ function TablaAdmin() {
     alert('Token copiado al portapapeles');
   };
 
+  const handleGenerateReport = () => {
+    const visibleData = registros.filter((registro) => !selectedReporte || registro.token === selectedReporte);
+    console.log('Datos visibles:', visibleData);
+    window.print();
+  };
+
   return (
     <div className="tabla-admin-container">
       <img src={logo} alt="AnesTrack Logo" className="logo" />
       <h1>ANESTRACK</h1>
-      <h2>Tabla Admin</h2>
-      <div className="filtro-reporte">
-        <label htmlFor="reporte-select">Seleccione un reporte:</label>
-        <select id="reporte-select" value={selectedReporte} onChange={handleReporteChange}>
-          <option value="">Seleccione un reporte</option>
-          {Array.isArray(reportes) && reportes.map((reporte) => (
-            <option key={reporte.id_user} value={reporte.token}>
-              {`${reporte.dia}/${reporte.mes}/${reporte.year} - ${reporte.id_user}`}
-            </option>
-          ))}
-        </select>
+      <div className="tab-buttons">
+        <button onClick={() => setActiveTab('tabla')}>Ver Tabla</button>
+        <button onClick={() => setActiveTab('token')}>Generar Token</button>
       </div>
-      <table className="tabla-registros">
-        <thead>
-          <tr>
-            <th>Agente Anestésico</th>
-            <th>Clínico</th>
-            <th>Consumo Mensual (ml)</th>
-            <th>Índice Día</th>
-            <th>Índice Semana</th>
-            <th>Número de Botellas</th>
-            <th>Estado</th>
-            <th>Token</th>
-          </tr>
-        </thead>
-        <tbody>
-          {registros
-            .filter((registro) => !selectedReporte || registro.token === selectedReporte)
-            .map((registro) => (
-              <tr key={registro.token}>
-                <td>{registro.agenteAne}</td>
-                <td>{registro.clinico}</td>
-                <td>{registro.conMensual}</td>
-                <td>{registro.indiceDia}</td>
-                <td>{registro.indiceSemana}</td>
-                <td>{registro.numeroBotellas}</td>
-                <td>{registro.state ? 'Activo' : 'Inactivo'}</td>
-                <td>{registro.token}</td>
-              </tr>
-            ))}
-        </tbody>
-      </table>
-      <div className="generar-token">
-        <h2>Generar Token</h2>
-        <form onSubmit={handleGenerateToken}>
-          <label>
-            Día:
-            <input type="number" name="dia" value={fecha.dia} onChange={handleFechaChange} required />
-          </label>
-          <label>
-            Mes:
-            <input type="number" name="mes" value={fecha.mes} onChange={handleFechaChange} required />
-          </label>
-          <label>
-            Año:
-            <input type="number" name="year" value={fecha.year} onChange={handleFechaChange} required />
-          </label>
-          <button type="submit">Generar</button>
-        </form>
-        {token && (
-          <div className="token-display">
-            <p>Token generado: {token}</p>
-            <button onClick={handleCopyToken}>Copiar Token</button>
+      {activeTab === 'tabla' && (
+        <div className="tabla-content">
+          <h2>Tabla Admin</h2>
+          <div className="filtro-reporte">
+            <label htmlFor="reporte-select">Seleccione un reporte:</label>
+            <select id="reporte-select" value={selectedReporte} onChange={handleReporteChange}>
+              <option value="">Seleccione un reporte</option>
+              {Array.isArray(reportes) && reportes.map((reporte) => (
+                <option key={reporte.token} value={reporte.token}>
+                  {`${reporte.dia}/${reporte.mes}/${reporte.year}`}
+                </option>
+              ))}
+            </select>
           </div>
-        )}
-      </div>
+          <table className="tabla-registros">
+            <thead>
+              <tr>
+                <th>Agente Anestésico</th>
+                <th>Clínico</th>
+                <th>Consumo Mensual (ml)</th>
+                <th>Índice Día</th>
+                <th>Índice Semana</th>
+                <th>Número de Botellas</th>
+                <th>Token</th>
+              </tr>
+            </thead>
+            <tbody>
+              {registros
+                .filter((registro) => !selectedReporte || registro.token === selectedReporte)
+                .map((registro) => (
+                  <tr key={registro.token}>
+                    <td>{registro.agenteAne}</td>
+                    <td>{registro.clinico}</td>
+                    <td>{registro.conMensual}</td>
+                    <td>{registro.indiceDia}</td>
+                    <td>{registro.indiceSemana}</td>
+                    <td>{registro.numeroBotellas}</td>
+                    <td>{registro.token}</td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+          <button onClick={handleGenerateReport}>Generar Reporte</button>
+        </div>
+      )}
+      {activeTab === 'token' && (
+        <div className="token-content">
+          <h2>Generar Token</h2>
+          <form onSubmit={handleGenerateToken}>
+            <label>
+              Fecha:
+              <input type="date" onChange={handleFechaChange} required />
+            </label>
+            <button type="submit">Generar</button>
+          </form>
+          {token && (
+            <div className="token-display">
+              <p>Token generado: {token}</p>
+              <button onClick={handleCopyToken}>Copiar Token</button>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
