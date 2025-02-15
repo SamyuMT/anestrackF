@@ -15,7 +15,7 @@ function LoginToken() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch(`http://anestrack.space:5002/get_token/token?token=${token}`);
+    const response = await fetch(`https://anestrack.space/get_token/token?token=${token}`);
     const data = await response.json();
     console.log(data); // Log the response data to the console
     // Add validation logic here
