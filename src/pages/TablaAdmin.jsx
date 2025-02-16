@@ -17,8 +17,12 @@ function TablaAdmin() {
     const fetchRegistros = async () => {
       try {
         const response = await fetch('https://anestrack.space/get_registros/info');
-        const data = await response.json();
-        setRegistros(data.data);
+        if (response.status === 400) {
+          setRegistros([]);
+        } else {
+          const data = await response.json();
+          setRegistros(data.data);
+        }
       } catch (error) {
         console.error('Error fetching registros:', error);
       }
@@ -28,8 +32,12 @@ function TablaAdmin() {
     const fetchReportes = async () => {
       try {
         const response = await fetch('https://anestrack.space/get_reportes/info');
-        const data = await response.json();
-        setReportes(data.data);
+        if (response.status === 400) {
+          setReportes([]);
+        } else {
+          const data = await response.json();
+          setReportes(data.data);
+        }
       } catch (error) {
         console.error('Error fetching reportes:', error);
       }
